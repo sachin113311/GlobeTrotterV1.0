@@ -1,0 +1,68 @@
+<div class="container" *ngIf="!username">
+  <h2>Enter your username to start:</h2>
+  <input [(ngModel)]="usernameInput" placeholder="Enter username..." />
+  <button (click)="registerUser()">Start</button>
+</div>
+
+<div class="container" *ngIf="username">
+  <h1>🌏 GLOBE-TROTTER 🌏</h1>
+  <div *ngIf="invitedBy">
+    <h3>🎉 You were invited by <strong>{{ invitedBy }}</strong></h3>
+    <p>🏆 Their current score: <strong>{{ inviterScore }}</strong></p>
+  </div>
+  <br>
+  <h3>Clues:</h3>
+      <ul>
+        <li *ngFor="let clue of city?.clues">{{ clue }}</li>
+      </ul>
+  <!-- Multiple Choice Options -->
+  <h3>🌏 Choose the Correct City:</h3>
+  <div *ngIf="city?.cityOption?.length > 0">
+    <label *ngFor="let option of city?.cityOption">
+      <input [disabled]="correct" type="radio" name="cityOption" [value]="option" [(ngModel)]="selectedOption" /> {{ option }}
+    </label>
+  </div>
+
+  <!-- Submit Button -->
+  <button 
+    (click)="checkAnswer()" 
+    [disabled]="!selectedOption"
+    [ngClass]="{ 'disabled-button': !selectedOption }">
+    Submit
+  </button>
+
+  <!-- Result Section -->
+  <div *ngIf="showResult">
+    <h2 [ngClass]="{ 'correct': correct, 'wrong': !correct }">
+      {{ correct ? '🎉 Correct!' : '😢 Wrong!' }}
+    </h2>
+     <!-- Confetti Effect -->
+     <canvas style="width: 0%;" id="confettiCanvas"></canvas>
+
+     <!-- Display Sad GIF on Wrong Answer -->
+     <div *ngIf="showSadFace" class="sad-face">
+      😢
+    </div>
+    <!-- Display Fun Facts on Correct Answer -->
+    <div *ngIf="correct">
+      <h3>🎈 Fun Facts:</h3>
+      <ul>
+        <li *ngFor="let fact of correctCity?.fun_fact">{{ fact }}</li>
+      </ul>
+
+      <h3>🧠 Trivia:</h3>
+      <ul>
+        <li *ngFor="let trivia of correctCity?.trivia">{{ trivia }}</li>
+      </ul>
+    </div>
+    <div class="button-container">
+      <button (click)="username=''">Restart</button>
+      <button (click)="loadNewCity()">Next</button>
+    </div>
+  </div>
+
+  <!-- Display Score -->
+  <h3 class="score">🏆 Score: {{ score }}</h3>
+  <br>
+  <button  *ngIf="showInvite" (click)="challengeFriend()" class="challenge-btn">🚀 Challenge a Friend</button>
+</div>
