@@ -5,7 +5,7 @@ import axios from 'axios';
   providedIn: 'root'
 })
 export class CityTriviaService {
-  private apiUrl = "http://localhost:5000/api";
+  private apiUrl = "https://globetrotterv1-0-server.onrender.com/api";
 
   async registerUser(username: string) {
     const response = await axios.post(`${this.apiUrl}/users/register`, { username });
